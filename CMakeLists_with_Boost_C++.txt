@@ -1,0 +1,32 @@
+cmake_minimum_required(VERSION 3.5)
+
+project(Listing3.13 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -Wall -Wextra")
+#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} - static")
+
+#add_library(mylib STATIC ml.cpp)
+#target_compile_definitions(mylib PUBLIC MYLIB)
+#target_link_libraries(${PROJECT_NAME} PUBLIC or SHARED <libs>)
+
+message("Конфигурирование исполняемого файла [${PROJECT_NAME}]")
+
+file(GLOB SRC_FILES ./src/*.cpp)
+
+find_package(Boost 1.74.0)
+if(Boost_FOUND)
+    include_directories(//usr/include/boost/)
+    add_executable(${PROJECT_NAME}
+      ${SRC_FILES}
+  )
+endif()
+
+target_link_libraries(${PROJECT_NAME} /usr/lib/x86_64-linux-gnu/libboost_thread.so.1.74.0)
+target_compile_options(${PROJECT_NAME} PUBLIC -g -O0 -Wall -Wextra)
+target_link_options(${PROJECT_NAME} PUBLIC -dynamic)
+
+
+#target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ./include/)
+target_include_directories(${PROJECT_NAME} PUBLIC ./include/)

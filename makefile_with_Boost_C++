@@ -1,0 +1,33 @@
+CC := g++
+INCPATH := "/home/nikita/C++/Anthony_Williams/Chapter3/Listing3.13/include/"
+INCPATH2 := "//usr/include/boost/"
+CFLAGS := -I $(INCPATH) -I $(INCPATH2) -c -g -O0 -Wall -Wextra
+LDFLAGS := -L "/usr/lib/x86_64-linux-gnu/" -lboost_thread
+SRCPATH := /home/nikita/C++/Anthony_Williams/Chapter3/Listing3.13/src
+#vpath %.cpp $(SRCPATH)/
+#SOURCES := main.cpp dns_cache.cpp
+search_wildcard := $(addsuffix /*.cpp, $(SRCPATH))
+SOURCES := $(wildcard $(search_wildcard))
+#SOURCES := $(wildcard $(SRCPATH)/*.cpp)
+OBJECTPATH := ./obj
+#vpath %.o $(OBJECTPATH)/
+#OBJECTS := main.o dns_cache.o
+OBJECTS := $(patsubst $(SRCPATH)/%.cpp, $(OBJECTPATH)/%.o, ${SOURCES})
+BUILDPATH := ./build
+EXECUTABLE := Listing3.13
+
+.PHONY: all clean
+
+all: $(BUILDPATH)/$(EXECUTABLE)
+
+$(BUILDPATH)/$(EXECUTABLE): $(OBJECTS)
+	@echo [Linking:] $@
+	$(CC) $^ -o $@ $(LDFLAGS)
+
+$(OBJECTS): $(OBJECTPATH)/%.o: $(SRCPATH)/%.cpp
+	@echo [Compiling:] $@
+	$(CC) $(CFLAGS) $< -o $@
+
+clean:
+	rm $(BUILDPATH)/$(EXECUTABLE) $(OBJECTPATH)/*.o
+	rm -rf $(EXECUTABLE)
